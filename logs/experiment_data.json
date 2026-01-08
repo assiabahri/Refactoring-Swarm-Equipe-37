@@ -10,5 +10,1060 @@
             "output_response": "Target: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\my_sandbox"
         },
         "status": "SUCCESS"
+    },
+    {
+        "id": "411cad29-c959-40a1-823d-3869ae28852c",
+        "timestamp": "2026-01-08T21:30:22.020681",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "3bf29926-b853-4e6d-b8b0-9004107b3664",
+        "timestamp": "2026-01-08T21:30:22.032469",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "Pytest execution failed: Pytest error: [WinError 2] Le fichier spécifié est introuvable",
+            "error": "Pytest error: [WinError 2] Le fichier spécifié est introuvable"
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "3f123166-4457-4f64-ab2c-fe3505016486",
+        "timestamp": "2026-01-08T21:31:38.261544",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "dfc0cf6d-c9b4-4cc7-ab9c-937fb6ce1f8a",
+        "timestamp": "2026-01-08T21:31:38.731127",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.01s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "1dd5cf9e-2ca0-4aeb-a1bf-451ae88cadfb",
+        "timestamp": "2026-01-08T21:33:49.437159",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "9fa1d4ed-7509-4fa4-9bd1-1fd456bc1017",
+        "timestamp": "2026-01-08T21:33:50.265571",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.01s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e6839dfd-073e-4275-bc5a-41414dd3f98c",
+        "timestamp": "2026-01-08T21:36:12.743251",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "5bfa0eba-5528-428b-b148-18947cec6b94",
+        "timestamp": "2026-01-08T21:36:12.895439",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+            "output_response": "Pylint analysis completed. Score: None/10. Total issues: 0. Issues breakdown: {'error': [], 'warning': [], 'convention': [], 'refactor': []}",
+            "pylint_score": null,
+            "total_issues": 0,
+            "categorized_issues": {
+                "error": [],
+                "warning": [],
+                "convention": [],
+                "refactor": []
+            },
+            "issues_detail": []
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "aee3534f-4718-427c-9b7d-d55aafb9adb8",
+        "timestamp": "2026-01-08T21:36:13.347982",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.01s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "ecf55ea4-33c8-451e-a0dc-8d8ba61dcc45",
+        "timestamp": "2026-01-08T21:39:29.594031",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "ca48ee21-2447-4cfe-b88e-1cbef3854d8d",
+        "timestamp": "2026-01-08T21:39:29.829640",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+            "output_response": "Pylint analysis completed. Score: None/10. Total issues: 0. Issues breakdown: {'error': [], 'warning': [], 'convention': [], 'refactor': []}",
+            "pylint_score": null,
+            "total_issues": 0,
+            "categorized_issues": {
+                "error": [],
+                "warning": [],
+                "convention": [],
+                "refactor": []
+            },
+            "issues_detail": []
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7617ff87-3b99-4f94-a433-9a6aa13ecef5",
+        "timestamp": "2026-01-08T21:39:30.281546",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.00s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "c4c27c50-1e49-4ccf-93c1-a02741452382",
+        "timestamp": "2026-01-08T21:40:45.333672",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e13b1e25-5d60-4fb4-8bd6-691a026dc3ff",
+        "timestamp": "2026-01-08T21:40:46.519751",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+            "output_response": "Pylint analysis completed. Score: None/10. Total issues: 3. Issues breakdown: {'error': [], 'warning': [], 'convention': [{'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 5, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-final-newline', 'message': 'Final newline missing', 'message-id': 'C0304'}, {'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 1, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-module-docstring', 'message': 'Missing module docstring', 'message-id': 'C0114'}, {'type': 'convention', 'module': 'buggy_1', 'obj': 'calculate_sum', 'line': 1, 'column': 0, 'endLine': 1, 'endColumn': 17, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-function-docstring', 'message': 'Missing function or method docstring', 'message-id': 'C0116'}], 'refactor': []}",
+            "pylint_score": null,
+            "total_issues": 3,
+            "categorized_issues": {
+                "error": [],
+                "warning": [],
+                "convention": [
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 5,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-final-newline",
+                        "message": "Final newline missing",
+                        "message-id": "C0304"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-module-docstring",
+                        "message": "Missing module docstring",
+                        "message-id": "C0114"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "calculate_sum",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": 1,
+                        "endColumn": 17,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-function-docstring",
+                        "message": "Missing function or method docstring",
+                        "message-id": "C0116"
+                    }
+                ],
+                "refactor": []
+            },
+            "issues_detail": [
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 5,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-final-newline",
+                    "message": "Final newline missing",
+                    "message-id": "C0304"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-module-docstring",
+                    "message": "Missing module docstring",
+                    "message-id": "C0114"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "calculate_sum",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": 1,
+                    "endColumn": 17,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-function-docstring",
+                    "message": "Missing function or method docstring",
+                    "message-id": "C0116"
+                }
+            ]
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bce37a31-62b7-4ed5-8252-5449cc5409d8",
+        "timestamp": "2026-01-08T21:40:46.976969",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.01s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "66eb47a9-7b50-4797-9a6a-a674a19abbb0",
+        "timestamp": "2026-01-08T21:43:26.029446",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "51bea3d1-008a-4725-ba4e-cd9fe6338351",
+        "timestamp": "2026-01-08T21:43:26.748958",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+            "output_response": "Pylint analysis completed. Score: None/10. Total issues: 3. Issues breakdown: {'error': [], 'warning': [], 'convention': [{'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 5, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-final-newline', 'message': 'Final newline missing', 'message-id': 'C0304'}, {'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 1, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-module-docstring', 'message': 'Missing module docstring', 'message-id': 'C0114'}, {'type': 'convention', 'module': 'buggy_1', 'obj': 'calculate_sum', 'line': 1, 'column': 0, 'endLine': 1, 'endColumn': 17, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-function-docstring', 'message': 'Missing function or method docstring', 'message-id': 'C0116'}], 'refactor': []}",
+            "pylint_score": null,
+            "total_issues": 3,
+            "categorized_issues": {
+                "error": [],
+                "warning": [],
+                "convention": [
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 5,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-final-newline",
+                        "message": "Final newline missing",
+                        "message-id": "C0304"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-module-docstring",
+                        "message": "Missing module docstring",
+                        "message-id": "C0114"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "calculate_sum",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": 1,
+                        "endColumn": 17,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-function-docstring",
+                        "message": "Missing function or method docstring",
+                        "message-id": "C0116"
+                    }
+                ],
+                "refactor": []
+            },
+            "issues_detail": [
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 5,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-final-newline",
+                    "message": "Final newline missing",
+                    "message-id": "C0304"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-module-docstring",
+                    "message": "Missing module docstring",
+                    "message-id": "C0114"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "calculate_sum",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": 1,
+                    "endColumn": 17,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-function-docstring",
+                    "message": "Missing function or method docstring",
+                    "message-id": "C0116"
+                }
+            ]
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "fd3ede20-17eb-4d27-8693-240db1880c3e",
+        "timestamp": "2026-01-08T21:43:27.307649",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.00s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "cfb1664d-16a8-4e7d-87b8-2d4724b5b99a",
+        "timestamp": "2026-01-08T21:46:33.347828",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "eac052b5-8c12-4b49-9c75-341bebdf3496",
+        "timestamp": "2026-01-08T21:46:34.043988",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+            "output_response": "Pylint analysis completed. Score: None/10. Total issues: 3. Issues breakdown: {'error': [], 'warning': [], 'convention': [{'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 5, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-final-newline', 'message': 'Final newline missing', 'message-id': 'C0304'}, {'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 1, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-module-docstring', 'message': 'Missing module docstring', 'message-id': 'C0114'}, {'type': 'convention', 'module': 'buggy_1', 'obj': 'calculate_sum', 'line': 1, 'column': 0, 'endLine': 1, 'endColumn': 17, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-function-docstring', 'message': 'Missing function or method docstring', 'message-id': 'C0116'}], 'refactor': []}",
+            "pylint_score": null,
+            "total_issues": 3,
+            "categorized_issues": {
+                "error": [],
+                "warning": [],
+                "convention": [
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 5,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-final-newline",
+                        "message": "Final newline missing",
+                        "message-id": "C0304"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-module-docstring",
+                        "message": "Missing module docstring",
+                        "message-id": "C0114"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "calculate_sum",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": 1,
+                        "endColumn": 17,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-function-docstring",
+                        "message": "Missing function or method docstring",
+                        "message-id": "C0116"
+                    }
+                ],
+                "refactor": []
+            },
+            "issues_detail": [
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 5,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-final-newline",
+                    "message": "Final newline missing",
+                    "message-id": "C0304"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-module-docstring",
+                    "message": "Missing module docstring",
+                    "message-id": "C0114"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "calculate_sum",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": 1,
+                    "endColumn": 17,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-function-docstring",
+                    "message": "Missing function or method docstring",
+                    "message-id": "C0116"
+                }
+            ]
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2a3c6988-0b57-4e7d-ab50-ceb7399cf48d",
+        "timestamp": "2026-01-08T21:46:34.476005",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "ff2e2215-fab0-4613-99dd-8bf432078b69",
+        "timestamp": "2026-01-08T21:48:40.916317",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "6ad2dfb7-e4c0-4027-9d29-23d203756fab",
+        "timestamp": "2026-01-08T21:48:41.803494",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+            "output_response": "Pylint analysis completed. Score: None/10. Total issues: 3. Issues breakdown: {'error': [], 'warning': [], 'convention': [{'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 5, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-final-newline', 'message': 'Final newline missing', 'message-id': 'C0304'}, {'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 1, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-module-docstring', 'message': 'Missing module docstring', 'message-id': 'C0114'}, {'type': 'convention', 'module': 'buggy_1', 'obj': 'calculate_sum', 'line': 1, 'column': 0, 'endLine': 1, 'endColumn': 17, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-function-docstring', 'message': 'Missing function or method docstring', 'message-id': 'C0116'}], 'refactor': []}",
+            "pylint_score": null,
+            "total_issues": 3,
+            "categorized_issues": {
+                "error": [],
+                "warning": [],
+                "convention": [
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 5,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-final-newline",
+                        "message": "Final newline missing",
+                        "message-id": "C0304"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-module-docstring",
+                        "message": "Missing module docstring",
+                        "message-id": "C0114"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "calculate_sum",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": 1,
+                        "endColumn": 17,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-function-docstring",
+                        "message": "Missing function or method docstring",
+                        "message-id": "C0116"
+                    }
+                ],
+                "refactor": []
+            },
+            "issues_detail": [
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 5,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-final-newline",
+                    "message": "Final newline missing",
+                    "message-id": "C0304"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-module-docstring",
+                    "message": "Missing module docstring",
+                    "message-id": "C0114"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "calculate_sum",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": 1,
+                    "endColumn": 17,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-function-docstring",
+                    "message": "Missing function or method docstring",
+                    "message-id": "C0116"
+                }
+            ]
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "d4ad2d89-cd80-4b53-b470-f8947215062a",
+        "timestamp": "2026-01-08T21:48:42.319896",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.02s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "be74c3dc-43d1-42b9-9ac9-4d41a364e4cc",
+        "timestamp": "2026-01-08T21:50:41.837659",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "3562227a-0597-4915-a1e1-932892fdfc6e",
+        "timestamp": "2026-01-08T21:50:43.223635",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+            "output_response": "Pylint analysis completed. Score: 2.5/10. Total issues: 3. Issues breakdown: {'error': [], 'warning': [], 'convention': [{'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 5, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-final-newline', 'message': 'Final newline missing', 'message-id': 'C0304'}, {'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 1, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-module-docstring', 'message': 'Missing module docstring', 'message-id': 'C0114'}, {'type': 'convention', 'module': 'buggy_1', 'obj': 'calculate_sum', 'line': 1, 'column': 0, 'endLine': 1, 'endColumn': 17, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-function-docstring', 'message': 'Missing function or method docstring', 'message-id': 'C0116'}], 'refactor': []}",
+            "pylint_score": 2.5,
+            "total_issues": 3,
+            "categorized_issues": {
+                "error": [],
+                "warning": [],
+                "convention": [
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 5,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-final-newline",
+                        "message": "Final newline missing",
+                        "message-id": "C0304"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-module-docstring",
+                        "message": "Missing module docstring",
+                        "message-id": "C0114"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "calculate_sum",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": 1,
+                        "endColumn": 17,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-function-docstring",
+                        "message": "Missing function or method docstring",
+                        "message-id": "C0116"
+                    }
+                ],
+                "refactor": []
+            },
+            "issues_detail": [
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 5,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-final-newline",
+                    "message": "Final newline missing",
+                    "message-id": "C0304"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-module-docstring",
+                    "message": "Missing module docstring",
+                    "message-id": "C0114"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "calculate_sum",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": 1,
+                    "endColumn": 17,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-function-docstring",
+                    "message": "Missing function or method docstring",
+                    "message-id": "C0116"
+                }
+            ]
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "880d6a92-579d-4333-acc7-1729e3527798",
+        "timestamp": "2026-01-08T21:50:43.724244",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.01s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7d644e18-80a9-42c2-a170-9368a81ddc46",
+        "timestamp": "2026-01-08T21:50:59.257065",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+            "output_response": "File read successfully. Content length: 90 characters. Content: def calculate_sum(a, b):\n    result = a + b\n    return result\n\nprint(calculate_sum(5, 10))",
+            "file_size": 90,
+            "file_path": "C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\\buggy_1.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "3f8b1071-699e-4e49-9c06-03cfe316519c",
+        "timestamp": "2026-01-08T21:51:00.611274",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "buggy_1.py",
+            "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+            "output_response": "Pylint analysis completed. Score: 2.5/10. Total issues: 3. Issues breakdown: {'error': [], 'warning': [], 'convention': [{'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 5, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-final-newline', 'message': 'Final newline missing', 'message-id': 'C0304'}, {'type': 'convention', 'module': 'buggy_1', 'obj': '', 'line': 1, 'column': 0, 'endLine': None, 'endColumn': None, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-module-docstring', 'message': 'Missing module docstring', 'message-id': 'C0114'}, {'type': 'convention', 'module': 'buggy_1', 'obj': 'calculate_sum', 'line': 1, 'column': 0, 'endLine': 1, 'endColumn': 17, 'path': 'sandbox\\\\buggy_1.py', 'symbol': 'missing-function-docstring', 'message': 'Missing function or method docstring', 'message-id': 'C0116'}], 'refactor': []}",
+            "pylint_score": 2.5,
+            "total_issues": 3,
+            "categorized_issues": {
+                "error": [],
+                "warning": [],
+                "convention": [
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 5,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-final-newline",
+                        "message": "Final newline missing",
+                        "message-id": "C0304"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": null,
+                        "endColumn": null,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-module-docstring",
+                        "message": "Missing module docstring",
+                        "message-id": "C0114"
+                    },
+                    {
+                        "type": "convention",
+                        "module": "buggy_1",
+                        "obj": "calculate_sum",
+                        "line": 1,
+                        "column": 0,
+                        "endLine": 1,
+                        "endColumn": 17,
+                        "path": "sandbox\\buggy_1.py",
+                        "symbol": "missing-function-docstring",
+                        "message": "Missing function or method docstring",
+                        "message-id": "C0116"
+                    }
+                ],
+                "refactor": []
+            },
+            "issues_detail": [
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 5,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-final-newline",
+                    "message": "Final newline missing",
+                    "message-id": "C0304"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": null,
+                    "endColumn": null,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-module-docstring",
+                    "message": "Missing module docstring",
+                    "message-id": "C0114"
+                },
+                {
+                    "type": "convention",
+                    "module": "buggy_1",
+                    "obj": "calculate_sum",
+                    "line": 1,
+                    "column": 0,
+                    "endLine": 1,
+                    "endColumn": 17,
+                    "path": "sandbox\\buggy_1.py",
+                    "symbol": "missing-function-docstring",
+                    "message": "Missing function or method docstring",
+                    "message-id": "C0116"
+                }
+            ]
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "6ed2fd79-2d15-47cc-9dfb-d80568b97a5e",
+        "timestamp": "2026-01-08T21:51:01.089375",
+        "agent": "Main_Agent",
+        "model": "gemini-2.5-flash",
+        "action": "DEBUG",
+        "details": {
+            "test_file": "test_buggy_1.py",
+            "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nmetadata: {'Python': '3.11.9', 'Platform': 'Windows-10-10.0.26200-SP0', 'Packages': {'pytest': '7.4.4', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1'}}\nrootdir: C:\\Users\\DELL\\Refactoring-Swarm-Equipe-37\\sandbox\nplugins: json-report-1.5.0, metadata-3.1.1\ncollecting ... collected 1 item\n\ntest_buggy_1.py::test_calculate_sum PASSED                               [100%]\n\n--------------------------------- JSON report ---------------------------------\nreport auto-save skipped\n============================== 1 passed in 0.00s ==============================\n",
+            "tests_passed": true,
+            "statistics": {
+                "passed": 1,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0,
+                "total": 1
+            },
+            "exit_code": 0
+        },
+        "status": "SUCCESS"
     }
 ]

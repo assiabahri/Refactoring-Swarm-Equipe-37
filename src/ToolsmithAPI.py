@@ -206,12 +206,6 @@ class ToolsmithAPI:
     def run_pylint(self, file_path: str) -> Dict:
         """
         Run Pylint static analysis on a Python file.
-        
-        Args:
-            file_path: Path to Python file to analyze
-            
-        Returns:
-            Dict with analysis results including score and issues
         """
         try:
             validated_path = self._validate_path(file_path)
@@ -219,24 +213,33 @@ class ToolsmithAPI:
             if not validated_path.exists():
                 return {"success": False, "error": "File not found"}
             
-            # Run pylint with JSON output
-            result = subprocess.run(
+            # Run pylint with JSON output for issues
+            result_json = subprocess.run(
                 ['pylint', str(validated_path), '--output-format=json'],
                 capture_output=True,
                 text=True,
                 timeout=30
             )
             
-            # Parse JSON output
+            # Run pylint again in text format to get the score
+            result_text = subprocess.run(
+                ['pylint', str(validated_path)],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            # Parse JSON output for issues
             issues = []
-            if result.stdout:
+            if result_json.stdout:
                 try:
-                    issues = json.loads(result.stdout)
+                    issues = json.loads(result_json.stdout)
                 except json.JSONDecodeError:
                     pass
             
-            # Extract score from stderr (pylint prints score there)
-            score = self._extract_pylint_score(result.stderr)
+            # Extract score from text output
+            combined_output = result_text.stderr + "\n" + result_text.stdout
+            score = self._extract_pylint_score(combined_output)
             
             # Categorize issues
             categorized = {
@@ -261,6 +264,7 @@ class ToolsmithAPI:
             return {"success": False, "error": str(e)}
         except Exception as e:
             return {"success": False, "error": f"Pylint error: {str(e)}"}
+    
     
     def _extract_pylint_score(self, stderr_output: str) -> Optional[float]:
         """

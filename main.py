@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from src.ToolsmithAPI import ToolsmithAPI
+from src.utils.logger import log_experiment, ActionType 
 
 def main():
     # -------------------------------
@@ -55,12 +56,86 @@ def main():
         else:
             print(f"❌ Pylint failed on {f['relative_path']} | Error: {pylint_result.get('error')}")
     """
+
     # Read a file
     print("--> reading a file :")
     result = api.read_file("buggy_1.py")
     if result["success"]:
-        print(f"File content: {result['content'][:100]}...")
+        file_content = result['content']
+        print(f"File content: {file_content[:100]}...")
+        
+        # LOG: File reading and analysis
+        log_experiment(
+            agent_name="Main_Agent",
+            model_used="gemini-2.5-flash",
+            action=ActionType.ANALYSIS,
+            details={
+                "file_analyzed": "buggy_1.py",
+                "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+                "output_response": f"File read successfully. Content length: {len(file_content)} characters. Content: {file_content[:200]}",
+                "file_size": result.get('size', 0),
+                "file_path": result.get('path', '')
+            },
+            status="SUCCESS"
+        )
+    else:
+        print(f"❌ Failed to read file: {result.get('error')}")
+        
+        # LOG: Failed file reading
+        log_experiment(
+            agent_name="Main_Agent",
+            model_used="gemini-2.5-flash",
+            action=ActionType.ANALYSIS,
+            details={
+                "file_analyzed": "buggy_1.py",
+                "input_prompt": "Analyze the Python file buggy_1.py for potential issues",
+                "output_response": f"Failed to read file: {result.get('error')}",
+                "error": result.get('error')
+            },
+            status="FAILURE"
+        )
+        return
 
+     #  Run Pylint
+    print("--> pylint on a buggy file :")
+    pylint_result = api.run_pylint("buggy_1.py")
+
+    if pylint_result["success"]:
+        print(f"Pylint score: {pylint_result['score']}/10")
+        print(f"Total issues: {pylint_result['total_issues']}")
+    
+        # LOG: Pylint analysis
+        log_experiment(
+            agent_name="Main_Agent",
+            model_used="gemini-2.5-flash",
+            action=ActionType.ANALYSIS,
+            details={
+                "file_analyzed": "buggy_1.py",
+                "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+                "output_response": f"Pylint analysis completed. Score: {pylint_result['score']}/10. Total issues: {pylint_result['total_issues']}. Issues breakdown: {pylint_result.get('categorized', {})}",
+                "pylint_score": pylint_result['score'],
+                "total_issues": pylint_result['total_issues'],
+                "categorized_issues": pylint_result.get('categorized', {}),
+                "issues_detail": pylint_result.get('issues', [])
+            },
+            status="SUCCESS"
+        )
+    else:
+        print(f"❌ Pylint failed: {pylint_result.get('error')}")
+        
+        # LOG: Pylint failure
+        log_experiment(
+            agent_name="Main_Agent",
+            model_used="gemini-2.5-flash",
+            action=ActionType.ANALYSIS,
+            details={
+                "file_analyzed": "buggy_1.py",
+                "input_prompt": "Run static code analysis using Pylint on buggy_1.py to identify code quality issues",
+                "output_response": f"Pylint analysis failed: {pylint_result.get('error')}",
+                "error": pylint_result.get('error')
+            },
+            status="FAILURE"
+        )
 
     # Run tests
     print("--> pytest on a test file :")
@@ -68,10 +143,40 @@ def main():
     if test_result["success"]:
         print(f"Tests passed: {test_result['passed']}")
         print(f"Statistics: {test_result['statistics']}")
-    else:
-        print(f"Pytest failed: {test_result.get('error')}")
-    """
     
+        # LOG: Test execution
+        log_experiment(
+            agent_name="Main_Agent",
+            model_used="gemini-2.5-flash",
+            action=ActionType.DEBUG,
+            details={
+                "test_file": "test_buggy_1.py",
+                "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+                "output_response": test_result.get('output', 'Tests executed'),
+                "tests_passed": test_result['passed'],
+                "statistics": test_result['statistics'],
+                "exit_code": test_result.get('exit_code', 0)
+            },
+            status="SUCCESS" if test_result['passed'] else "FAILURE"
+        )
+    else:
+        print(f"❌ Pytest failed: {test_result.get('error')}")
+        
+        # LOG: Test execution failure
+        log_experiment(
+            agent_name="Main_Agent",
+            model_used="gemini-2.5-flash",
+            action=ActionType.DEBUG,
+            details={
+                "test_file": "test_buggy_1.py",
+                "input_prompt": "Execute pytest on test_buggy_1.py to verify code correctness",
+                "output_response": f"Pytest execution failed: {test_result.get('error')}",
+                "error": test_result.get('error')
+            },
+            status="FAILURE"
+        )
+    """
+
     # Write corrected code
     corrected_code = "def hello():\n    print('Hello, World!')\n"
     write_result = api.write_file("sandbox/buggy_1.py", corrected_code)
