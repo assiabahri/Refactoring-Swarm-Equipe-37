@@ -42,7 +42,7 @@ class ToolsmithAPI:
         Validate that a path is within the sandbox.
         
         Args:
-            file_path: Path to validate
+            file_path: Path to validate (can be relative or absolute)
             
         Returns:
             Resolved Path object
@@ -51,15 +51,20 @@ class ToolsmithAPI:
             SecurityError: If path is outside sandbox
         """
         try:
-            resolved = Path(file_path).resolve()
+            # If relative path, make it relative to sandbox_root
+            path = Path(file_path)
+            if not path.is_absolute():
+                resolved = (self.sandbox_root / path).resolve()
+            else:
+                resolved = path.resolve()
             
-            # Check if path is within sandbox
-            if not str(resolved).startswith(str(self.sandbox_root)):
-                raise SecurityError(
-                    f"Access denied: {file_path} is outside sandbox {self.sandbox_root}"
-                )
-            
+            # Check if it's within sandbox
+            resolved.relative_to(self.sandbox_root)
             return resolved
+        except ValueError:
+            raise SecurityError(
+                f"Access denied: {file_path} is outside sandbox {self.sandbox_root}"
+            )
         except Exception as e:
             raise SecurityError(f"Path validation failed: {str(e)}")
     
