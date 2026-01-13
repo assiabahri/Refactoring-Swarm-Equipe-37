@@ -7,6 +7,7 @@ import os
 import json
 import subprocess
 import shutil
+import re
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
@@ -23,53 +24,53 @@ class ToolsmithAPI:
     Main API class providing secure tools for agents.
     All file operations are sandboxed to prevent unauthorized access.
     """
-    
+   
     def __init__(self, sandbox_root: str):
         """
         Initialize the Toolsmith API with a sandbox root directory.
-        
+       
         Args:
             sandbox_root: Absolute path to the sandbox directory
         """
         self.sandbox_root = Path(sandbox_root).resolve()
         self.backup_dir = self.sandbox_root / ".backups"
         self.backup_dir.mkdir(exist_ok=True)
-        
+       
     # ==================== SECURITY LAYER ====================
-    
+   
     def _validate_path(self, file_path: str) -> Path:
         """
         Validate that a path is within the sandbox.
-        
+       
         Args:
             file_path: Path to validate
-            
+           
         Returns:
             Resolved Path object
-            
+           
         Raises:
             SecurityError: If path is outside sandbox
         """
         try:
             resolved = Path(file_path).resolve()
-            
+           
             # Check if path is within sandbox
             if not str(resolved).startswith(str(self.sandbox_root)):
                 raise SecurityError(
                     f"Access denied: {file_path} is outside sandbox {self.sandbox_root}"
                 )
-            
+           
             return resolved
         except Exception as e:
             raise SecurityError(f"Path validation failed: {str(e)}")
-    
+   
     def _create_backup(self, file_path: Path) -> str:
         """
         Create a backup of a file before modification.
-        
+       
         Args:
             file_path: Path to file to backup
-            
+           
         Returns:
             Path to backup file
         """
@@ -80,71 +81,73 @@ class ToolsmithAPI:
             shutil.copy2(file_path, backup_path)
             return str(backup_path)
         return None
-    
+   
     # ==================== FILE OPERATIONS ====================
-    
+   
     def read_file(self, file_path: str) -> Dict:
         """
         Safely read a file from the sandbox.
-        
+       
         Args:
             file_path: Path to file to read
-            
+           
         Returns:
             Dict with 'success', 'content', 'error' keys
         """
         try:
             validated_path = self._validate_path(file_path)
-            
+           
             if not validated_path.exists():
                 return {
                     "success": False,
                     "content": None,
-                    "error": f"File not found: {file_path}"
+                    "error": f"File not found: {file_path}",
+                    "total_issues": 0
                 }
-            
+           
             with open(validated_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-            
+           
             return {
                 "success": True,
                 "content": content,
                 "error": None,
                 "path": str(validated_path),
-                "size": len(content)
+                "size": len(content),
+                "total_issues": 0
             }
         except SecurityError as e:
-            return {"success": False, "content": None, "error": str(e)}
+            return {"success": False, "content": None, "error": str(e), "total_issues": 0}
         except Exception as e:
-            return {"success": False, "content": None, "error": f"Read error: {str(e)}"}
-    
+            return {"success": False, "content": None, "error": f"Read error: {str(e)}", "total_issues": 0}
+   
     def write_file(self, file_path: str, content: str, create_backup: bool = True) -> Dict:
         """
         Safely write content to a file in the sandbox.
-        
+       
         Args:
             file_path: Path to file to write
             content: Content to write
             create_backup: Whether to create backup before writing
-            
+           
         Returns:
             Dict with 'success', 'backup_path', 'error' keys
         """
         try:
             validated_path = self._validate_path(file_path)
-            
+           
             # Create backup if file exists
             backup_path = None
             if create_backup and validated_path.exists():
                 backup_path = self._create_backup(validated_path)
-            
+           
             # Ensure parent directory exists
             validated_path.parent.mkdir(parents=True, exist_ok=True)
-            
+           
             # Write content
             with open(validated_path, 'w', encoding='utf-8') as f:
                 f.write(content)
-            
+           
             return {
                 "success": True,
                 "path": str(validated_path),
@@ -155,14 +158,14 @@ class ToolsmithAPI:
             return {"success": False, "backup_path": None, "error": str(e)}
         except Exception as e:
             return {"success": False, "backup_path": None, "error": f"Write error: {str(e)}"}
-    
+   
     def list_python_files(self, directory: str = None) -> Dict:
         """
         List all Python files in the sandbox or a subdirectory.
-        
+       
         Args:
             directory: Subdirectory to search (None for root)
-            
+           
         Returns:
             Dict with 'success', 'files', 'error' keys
         """
@@ -171,10 +174,10 @@ class ToolsmithAPI:
                 search_path = self._validate_path(directory)
             else:
                 search_path = self.sandbox_root
-            
+           
             if not search_path.exists():
                 return {"success": False, "files": [], "error": "Directory not found"}
-            
+           
             python_files = []
             for py_file in search_path.rglob("*.py"):
                 # Skip backup directory
@@ -184,7 +187,7 @@ class ToolsmithAPI:
                         "relative_path": str(py_file.relative_to(self.sandbox_root)),
                         "size": py_file.stat().st_size
                     })
-            
+           
             return {
                 "success": True,
                 "files": python_files,
@@ -195,129 +198,264 @@ class ToolsmithAPI:
             return {"success": False, "files": [], "error": str(e)}
         except Exception as e:
             return {"success": False, "files": [], "error": f"List error: {str(e)}"}
-    
+   
     # ==================== PYLINT INTERFACE ====================
-    
+   
     def run_pylint(self, file_path: str) -> Dict:
         """
         Run Pylint static analysis on a Python file.
-        
+       
         Args:
             file_path: Path to Python file to analyze
-            
+           
         Returns:
             Dict with analysis results including score and issues
         """
         try:
             validated_path = self._validate_path(file_path)
-            
+           
             if not validated_path.exists():
-                return {"success": False, "error": "File not found"}
-            
+                return {
+                    "success": False,
+                    "error": "File not found",
+                    "total_issues": 0,
+                    "score": 0.0
+                }
+           
             # Run pylint with JSON output
             result = subprocess.run(
-                ['pylint', str(validated_path), '--output-format=json'],
+                ['pylint', str(validated_path), '--output-format=json', '--score=yes'],
                 capture_output=True,
                 text=True,
                 timeout=30
             )
-            
-            # Parse JSON output
+           
+            # Parse JSON output - handle syntax errors specifically
             issues = []
-            if result.stdout:
+            json_parse_error = False
+           
+            if result.stdout and result.stdout.strip():
                 try:
-                    issues = json.loads(result.stdout)
-                except json.JSONDecodeError:
-                    pass
-            
-            # Extract score from stderr (pylint prints score there)
+                    parsed = json.loads(result.stdout)
+                    if isinstance(parsed, list):
+                        issues = parsed
+                    else:
+                        issues = [parsed]  # Handle single object case
+                except json.JSONDecodeError as e:
+                    json_parse_error = True
+                    print(f"⚠️  JSON parse error for {validated_path.name}: {e}")
+                   
+                    # Check stderr for syntax error clues
+                    if "syntax-error" in result.stderr or "Parsing failed" in result.stderr:
+                        # Create a synthetic fatal error for syntax issues
+                        issues = [{
+                            "type": "fatal",
+                            "module": validated_path.stem,
+                            "line": 1,
+                            "column": 1,
+                            "symbol": "syntax-error",
+                            "message": self._extract_syntax_error_message(result.stderr),
+                            "message-id": "E0001"
+                        }]
+           
+            # Extract score
             score = self._extract_pylint_score(result.stderr)
-            
+           
+            # Handle score assignment for syntax errors
+            if score is None:
+                # Check if we have any issues
+                if issues:
+                    # Check if it's a syntax error
+                    has_syntax_error = any(
+                        i.get("symbol") == "syntax-error" or
+                        i.get("type") in ["fatal", "error"]
+                        for i in issues
+                    )
+                    if has_syntax_error:
+                        score = 0.0  # Assign 0 for files with syntax errors
+                        print(f"⚠️  {validated_path.name}: Syntax errors detected, score set to 0")
+                    else:
+                        # Other issues but no score line found
+                        score = max(0.0, 10.0 - (len(issues) * 0.1))  # Deduct 0.1 per issue
+                else:
+                    # No issues and no score - assume perfect
+                    score = 10.0
+           
+            # Ensure score is never negative
+            score = max(0.0, min(10.0, score))
+           
             # Categorize issues
             categorized = {
                 "error": [i for i in issues if i.get("type") == "error"],
                 "warning": [i for i in issues if i.get("type") == "warning"],
                 "convention": [i for i in issues if i.get("type") == "convention"],
-                "refactor": [i for i in issues if i.get("type") == "refactor"]
+                "refactor": [i for i in issues if i.get("type") == "refactor"],
+                "fatal": [i for i in issues if i.get("type") == "fatal"]
             }
-            
+           
+            # Count all issues
+            total_issues = len(issues)
+           
+            # Get categorized counts
+            error_count = len(categorized["error"])
+            warning_count = len(categorized["warning"])
+            convention_count = len(categorized["convention"])
+            refactor_count = len(categorized["refactor"])
+            fatal_count = len(categorized["fatal"])
+           
             return {
                 "success": True,
                 "file": str(validated_path),
-                "score": score,
+                "filename": validated_path.name,
+                "score": round(score, 2),
                 "issues": issues,
                 "categorized": categorized,
-                "total_issues": len(issues),
+                "total_issues": total_issues,
+                "error_count": error_count,
+                "warning_count": warning_count,
+                "convention_count": convention_count,
+                "refactor_count": refactor_count,
+                "fatal_count": fatal_count,
+                "has_syntax_error": any(i.get("symbol") == "syntax-error" for i in issues),
+                "json_parse_error": json_parse_error,
                 "error": None
             }
         except subprocess.TimeoutExpired:
-            return {"success": False, "error": "Pylint execution timeout"}
+            return {
+                "success": False,
+                "error": "Pylint execution timeout",
+                "total_issues": 0,
+                "score": 0.0
+            }
         except SecurityError as e:
-            return {"success": False, "error": str(e)}
+            return {
+                "success": False,
+                "error": str(e),
+                "total_issues": 0,
+                "score": 0.0
+            }
         except Exception as e:
-            return {"success": False, "error": f"Pylint error: {str(e)}"}
-    
+            return {
+                "success": False,
+                "error": f"Pylint error: {str(e)}",
+                "total_issues": 0,
+                "score": 0.0
+            }
+   
     def _extract_pylint_score(self, stderr_output: str) -> Optional[float]:
         """
         Extract the Pylint score from stderr output.
-        
+       
         Args:
             stderr_output: Standard error output from pylint
-            
+           
         Returns:
             Float score or None if not found
         """
-        import re
-        match = re.search(r'Your code has been rated at ([\d.]+)/10', stderr_output)
+        if not stderr_output:
+            return None
+       
+        # Try to find the score line
+        match = re.search(r'Your code has been rated at ([\d.-]+)/10', stderr_output)
         if match:
-            return float(match.group(1))
+            score = float(match.group(1))
+            return max(0.0, score)  # Ensure non-negative
+       
+        # Alternative format: "rated at -X.XX/10"
+        match = re.search(r'rated at (-?[\d.]+)/10', stderr_output)
+        if match:
+            score = float(match.group(1))
+            return max(0.0, score)  # Ensure non-negative
+       
         return None
-    
+   
+    def _extract_syntax_error_message(self, stderr_output: str) -> str:
+        """
+        Extract syntax error message from pylint stderr.
+       
+        Args:
+            stderr_output: Standard error output
+           
+        Returns:
+            Clean error message
+        """
+        lines = stderr_output.split('\n')
+        for line in lines:
+            if "Parsing failed" in line or "syntax-error" in line:
+                # Clean up the message
+                message = line.strip()
+                # Remove redundant prefixes
+                if ": " in message:
+                    message = message.split(": ", 1)[1]
+                return message[:200]  # Truncate if too long
+       
+        return "Syntax error detected by pylint"
+   
     def run_pylint_on_directory(self, directory: str = None) -> Dict:
         """
         Run Pylint on all Python files in a directory.
-        
+       
         Args:
             directory: Directory to analyze (None for sandbox root)
-            
+           
         Returns:
             Dict with aggregated results
         """
         files_result = self.list_python_files(directory)
         if not files_result["success"]:
-            return files_result
-        
+            return {
+                "success": False,
+                "error": files_result.get("error", "Failed to list files"),
+                "average_score": 0.0,
+                "files_analyzed": 0
+            }
+       
         results = []
-        total_score = 0
+        total_score = 0.0
         analyzed_count = 0
-        
+        total_issues = 0
+       
+        print(f"🔍 Analyzing {len(files_result['files'])} files with Pylint...")
+       
         for file_info in files_result["files"]:
             pylint_result = self.run_pylint(file_info["path"])
-            if pylint_result["success"] and pylint_result["score"] is not None:
+           
+            if pylint_result["success"]:
                 results.append(pylint_result)
-                total_score += pylint_result["score"]
+                score = pylint_result.get("score", 0.0)
+                total_score += score
                 analyzed_count += 1
-        
-        avg_score = total_score / analyzed_count if analyzed_count > 0 else 0
-        
+                total_issues += pylint_result.get("total_issues", 0)
+               
+                # Print progress
+                filename = file_info.get("relative_path", "Unknown")
+                print(f"  📄 {filename:<40} | Score: {score:>5.1f}/10 | Issues: {pylint_result.get('total_issues', 0):>3}")
+            else:
+                print(f"  ⚠️  {file_info.get('relative_path', 'Unknown')}: Pylint failed - {pylint_result.get('error', 'Unknown error')}")
+       
+        # Calculate average
+        avg_score = total_score / analyzed_count if analyzed_count > 0 else 0.0
+       
         return {
             "success": True,
             "results": results,
-            "average_score": avg_score,
+            "average_score": round(avg_score, 2),
             "files_analyzed": analyzed_count,
+            "total_files": len(files_result["files"]),
+            "total_issues": total_issues,
             "error": None
         }
-    
+   
     # ==================== PYTEST INTERFACE ====================
-    
+   
     def run_pytest(self, target_path: str = None, verbose: bool = True) -> Dict:
         """
         Run pytest on a file or directory.
-        
+       
         Args:
             target_path: Path to test file/directory (None for sandbox root)
             verbose: Whether to use verbose output
-            
+           
         Returns:
             Dict with test results
         """
@@ -326,15 +464,20 @@ class ToolsmithAPI:
                 validated_path = self._validate_path(target_path)
             else:
                 validated_path = self.sandbox_root
-            
+           
             if not validated_path.exists():
-                return {"success": False, "error": "Test target not found"}
-            
+                return {
+                    "success": False,
+                    "error": "Test target not found",
+                    "passed": False,
+                    "statistics": {"passed": 0, "failed": 0, "errors": 0, "skipped": 0, "total": 0}
+                }
+           
             # Build pytest command
             cmd = ['pytest', str(validated_path), '--json-report', '--json-report-file=none']
             if verbose:
                 cmd.append('-v')
-            
+           
             # Run pytest
             result = subprocess.run(
                 cmd,
@@ -343,14 +486,14 @@ class ToolsmithAPI:
                 timeout=60,
                 cwd=str(self.sandbox_root)
             )
-            
+           
             # Parse results
             passed = result.returncode == 0
             output = result.stdout + result.stderr
-            
+           
             # Extract test statistics
             stats = self._parse_pytest_output(output)
-            
+           
             return {
                 "success": True,
                 "passed": passed,
@@ -360,24 +503,37 @@ class ToolsmithAPI:
                 "error": None if passed else "Tests failed"
             }
         except subprocess.TimeoutExpired:
-            return {"success": False, "passed": False, "error": "Pytest execution timeout"}
+            return {
+                "success": False,
+                "passed": False,
+                "error": "Pytest execution timeout",
+                "statistics": {"passed": 0, "failed": 0, "errors": 0, "skipped": 0, "total": 0}
+            }
         except SecurityError as e:
-            return {"success": False, "passed": False, "error": str(e)}
+            return {
+                "success": False,
+                "passed": False,
+                "error": str(e),
+                "statistics": {"passed": 0, "failed": 0, "errors": 0, "skipped": 0, "total": 0}
+            }
         except Exception as e:
-            return {"success": False, "passed": False, "error": f"Pytest error: {str(e)}"}
-    
+            return {
+                "success": False,
+                "passed": False,
+                "error": f"Pytest error: {str(e)}",
+                "statistics": {"passed": 0, "failed": 0, "errors": 0, "skipped": 0, "total": 0}
+            }
+   
     def _parse_pytest_output(self, output: str) -> Dict:
         """
         Parse pytest output to extract statistics.
-        
+       
         Args:
             output: Pytest output string
-            
+           
         Returns:
             Dict with test statistics
         """
-        import re
-        
         stats = {
             "passed": 0,
             "failed": 0,
@@ -385,47 +541,51 @@ class ToolsmithAPI:
             "skipped": 0,
             "total": 0
         }
-        
+       
         # Look for summary line like "5 passed, 2 failed in 1.23s"
         match = re.search(r'(\d+) passed', output)
         if match:
             stats["passed"] = int(match.group(1))
-        
+       
         match = re.search(r'(\d+) failed', output)
         if match:
             stats["failed"] = int(match.group(1))
-        
+       
         match = re.search(r'(\d+) error', output)
         if match:
             stats["errors"] = int(match.group(1))
-        
+       
         match = re.search(r'(\d+) skipped', output)
         if match:
             stats["skipped"] = int(match.group(1))
-        
+       
         stats["total"] = sum([stats["passed"], stats["failed"], stats["errors"]])
-        
+       
         return stats
-    
+   
     # ==================== SYNTAX VALIDATION ====================
-    
+   
     def validate_python_syntax(self, file_path: str) -> Dict:
         """
         Validate Python syntax without executing the code.
-        
+       
         Args:
             file_path: Path to Python file
-            
+           
         Returns:
             Dict with validation results
         """
         try:
             validated_path = self._validate_path(file_path)
-            
+           
             read_result = self.read_file(str(validated_path))
             if not read_result["success"]:
-                return read_result
-            
+                return {
+                    "success": False,
+                    "valid": False,
+                    "error": read_result["error"]
+                }
+           
             # Try to parse the AST
             try:
                 ast.parse(read_result["content"])
@@ -441,53 +601,62 @@ class ToolsmithAPI:
                     "error": {
                         "type": "SyntaxError",
                         "message": str(e),
-                        "line": e.lineno,
-                        "offset": e.offset
+                        "line": e.lineno if hasattr(e, 'lineno') else 1,
+                        "offset": e.offset if hasattr(e, 'offset') else 0
                     }
                 }
         except SecurityError as e:
-            return {"success": False, "valid": False, "error": str(e)}
+            return {
+                "success": False,
+                "valid": False,
+                "error": str(e)
+            }
         except Exception as e:
-            return {"success": False, "valid": False, "error": f"Validation error: {str(e)}"}
-    
+            return {
+                "success": False,
+                "valid": False,
+                "error": f"Validation error: {str(e)}"
+            }
+   
     # ==================== UTILITY FUNCTIONS ====================
-    
+   
     def get_sandbox_info(self) -> Dict:
         """
         Get information about the sandbox environment.
-        
+       
         Returns:
             Dict with sandbox statistics
         """
         python_files = self.list_python_files()
-        
+       
         return {
             "sandbox_root": str(self.sandbox_root),
             "python_files_count": python_files.get("count", 0),
             "backup_dir": str(self.backup_dir),
-            "exists": self.sandbox_root.exists()
+            "exists": self.sandbox_root.exists(),
+            "backup_count": len(list(self.backup_dir.glob("*"))) if self.backup_dir.exists() else 0
         }
-    
+   
     def restore_from_backup(self, backup_path: str, target_path: str) -> Dict:
         """
         Restore a file from backup.
-        
+       
         Args:
             backup_path: Path to backup file
             target_path: Target path to restore to
-            
+           
         Returns:
             Dict with operation result
         """
         try:
             validated_backup = self._validate_path(backup_path)
             validated_target = self._validate_path(target_path)
-            
+           
             if not validated_backup.exists():
                 return {"success": False, "error": "Backup file not found"}
-            
+           
             shutil.copy2(validated_backup, validated_target)
-            
+           
             return {
                 "success": True,
                 "restored_to": str(validated_target),
@@ -497,6 +666,56 @@ class ToolsmithAPI:
             return {"success": False, "error": str(e)}
         except Exception as e:
             return {"success": False, "error": f"Restore error: {str(e)}"}
+   
+    def get_pylint_summary(self, file_path: str) -> Dict:
+        """
+        Get a simplified summary of pylint results.
+       
+        Args:
+            file_path: Path to Python file
+           
+        Returns:
+            Dict with summary information
+        """
+        pylint_result = self.run_pylint(file_path)
+       
+        if not pylint_result["success"]:
+            return {
+                "success": False,
+                "error": pylint_result.get("error", "Unknown error"),
+                "summary": "Pylint analysis failed"
+            }
+       
+        score = pylint_result.get("score", 0.0)
+        total_issues = pylint_result.get("total_issues", 0)
+       
+        # Create issue breakdown
+        issues_by_type = []
+        for issue_type, issues in pylint_result.get("categorized", {}).items():
+            if issues:
+                issues_by_type.append(f"{len(issues)} {issue_type}")
+       
+        issue_summary = ", ".join(issues_by_type) if issues_by_type else "No issues"
+       
+        # Determine quality level
+        if score >= 9.0:
+            quality = "Excellent"
+        elif score >= 7.0:
+            quality = "Good"
+        elif score >= 5.0:
+            quality = "Fair"
+        else:
+            quality = "Poor"
+       
+        return {
+            "success": True,
+            "score": score,
+            "total_issues": total_issues,
+            "has_syntax_error": pylint_result.get("has_syntax_error", False),
+            "quality": quality,
+            "issue_summary": issue_summary,
+            "detailed_result": pylint_result
+        }
 
 
 # ==================== EXAMPLE USAGE ====================
@@ -504,24 +723,24 @@ class ToolsmithAPI:
 if __name__ == "__main__":
     # Initialize API with sandbox
     api = ToolsmithAPI(sandbox_root="/path/to/sandbox")
-    
+   
     # Example: Read a file
     result = api.read_file("buggy_code/example.py")
     if result["success"]:
         print(f"File content: {result['content'][:100]}...")
-    
+   
     # Example: Run Pylint
     pylint_result = api.run_pylint("buggy_code/example.py")
     if pylint_result["success"]:
         print(f"Pylint score: {pylint_result['score']}/10")
         print(f"Total issues: {pylint_result['total_issues']}")
-    
+   
     # Example: Run tests
     test_result = api.run_pytest("tests/")
     if test_result["success"]:
         print(f"Tests passed: {test_result['passed']}")
         print(f"Statistics: {test_result['statistics']}")
-    
+   
     # Example: Write corrected code
     corrected_code = "def hello():\n    print('Hello, World!')\n"
     write_result = api.write_file("buggy_code/example.py", corrected_code)
