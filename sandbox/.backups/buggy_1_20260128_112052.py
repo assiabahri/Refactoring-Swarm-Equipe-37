@@ -1,0 +1,17 @@
+def calculate_sum(numbers):
+    if not isinstance(numbers, list):
+        raise TypeError("Input must be a list")
+    if not all(isinstance(num, (int, float)) for num in numbers):
+        raise ValueError("All elements in the list must be numbers")
+    return sum(numbers)
+
+def main():
+    numbers = [1, 2, 3, 4, 5]
+    try:
+        result = calculate_sum(numbers)
+        print(result)
+    except (TypeError, ValueError) as e:
+        print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    main()

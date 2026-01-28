@@ -4,9 +4,11 @@ Manages system prompts for all agents and formats them with context
 Location: src/utils/prompts.py
 """
 
+
 import json
 from pathlib import Path
 from typing import Dict, List, Optional
+import re
 
 
 class PromptEngineer:
@@ -14,6 +16,78 @@ class PromptEngineer:
     Manages and formats prompts for the Refactoring Swarm agents.
     Loads prompt templates from files and injects context dynamically.
     """
+    
+    # FIXED: Added default prompts as fallback if files not found
+    DEFAULT_PROMPTS = {
+        "auditor": """You are the AUDITOR agent in a refactoring swarm system.
+
+Your role is to analyze the provided source code and identify:
+- code smells
+- design issues
+- refactoring opportunities
+
+You MUST respect the following rules:
+- Analyze ONLY the file content provided to you.
+- Do NOT invent files, functions, or behaviors.
+- Do NOT propose code changes.
+- Do NOT modify any file.
+- Do NOT write outside the sandbox directory.
+- Do NOT include explanations outside the JSON output.
+
+Your response MUST be a valid JSON object and NOTHING ELSE.
+
+Expected JSON format:
+{
+  "issues": [
+    {
+      "type": "string",
+      "description": "string",
+      "location": "string"
+    }
+  ],
+  "refactoring_plan": [
+    {
+      "step": "string",
+      "rationale": "string"
+    }
+  ]
+}""",
+        "fixer": """You are the FIXER agent in a refactoring swarm system.
+
+Your role is to apply the refactoring plan provided by the Auditor.
+
+You MUST respect the following rules:
+- Modify ONLY the files explicitly mentioned in the refactoring plan.
+- Write code ONLY inside the sandbox directory.
+- Do NOT create new files unless explicitly instructed.
+- Do NOT modify files outside the sandbox directory.
+- Do NOT invent functionality or behavior.
+- Return ONLY the fixed Python code, no markdown, no explanations.
+
+Your response MUST be ONLY the fixed Python code.""",
+        "judge": """You are the JUDGE agent in a refactoring swarm system.
+
+Your role is to evaluate the result of the refactoring based on test execution output.
+
+You MUST respect the following rules:
+- Analyze ONLY the test results provided to you.
+- Do NOT modify any code or files.
+- Do NOT invent test results or errors.
+- Do NOT include explanations outside the JSON output.
+
+Your response MUST be a valid JSON object and NOTHING ELSE.
+
+Expected JSON format:
+{
+  "tests_passed": true,
+  "errors": [
+    {
+      "test_name": "string",
+      "error_message": "string"
+    }
+  ]
+}"""
+    }
     
     def __init__(self, prompts_dir: str = "prompts"):
         """
@@ -37,12 +111,17 @@ class PromptEngineer:
         for agent_name, filename in template_files.items():
             filepath = self.prompts_dir / filename
             if filepath.exists():
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    self.templates[agent_name] = f.read()
-                print(f"✅ Loaded {agent_name} prompt template")
+                try:
+                    with open(filepath, 'r', encoding='utf-8') as f:
+                        self.templates[agent_name] = f.read()
+                    print(f"✅ Loaded {agent_name} prompt template from {filepath}")
+                except Exception as e:
+                    print(f"⚠️  Error loading {filename}: {str(e)}, using default")
+                    self.templates[agent_name] = self.DEFAULT_PROMPTS[agent_name]
             else:
-                print(f"⚠️  Warning: {filename} not found at {filepath}")
-                self.templates[agent_name] = ""
+                print(f"⚠️  Warning: {filename} not found at {filepath}, using default")
+                # FIXED: Use default prompts instead of empty strings
+                self.templates[agent_name] = self.DEFAULT_PROMPTS[agent_name]
     
     # ==================== AUDITOR PROMPTS ====================
     
@@ -61,7 +140,7 @@ class PromptEngineer:
         Returns:
             Formatted prompt string ready to send to LLM
         """
-        base_prompt = self.templates.get("auditor", "")
+        base_prompt = self.templates.get("auditor", self.DEFAULT_PROMPTS["auditor"])
         
         # Build context section
         context = f"""
@@ -112,7 +191,7 @@ TOP ISSUES:
         Returns:
             Formatted prompt for directory-level analysis
         """
-        base_prompt = self.templates.get("auditor", "")
+        base_prompt = self.templates.get("auditor", self.DEFAULT_PROMPTS["auditor"])
         
         context = "CODEBASE ANALYSIS:\n\n"
         
@@ -152,7 +231,7 @@ FILE: {file_path}
         Returns:
             Formatted prompt for code fixing
         """
-        base_prompt = self.templates.get("fixer", "")
+        base_prompt = self.templates.get("fixer", self.DEFAULT_PROMPTS["fixer"])
         
         # Build context
         context = f"""
@@ -182,13 +261,15 @@ REFACTORING PLAN:
         context += """
 
 IMPORTANT:
-- Return ONLY the fixed code, no explanations or markdown
+- Return ONLY the fixed Python code
+- Do NOT include markdown code blocks (```python)
+- Do NOT include any explanations
 - Ensure all syntax errors are corrected
 - Follow PEP 8 style guidelines
 - Add proper docstrings where missing
 - Fix all issues mentioned in the plan
 
-Provide the complete fixed code:
+Provide the complete fixed code now:
 """
         
         full_prompt = f"{base_prompt}\n\n{context}"
@@ -212,7 +293,7 @@ Provide the complete fixed code:
         Returns:
             Formatted prompt for fixing test failures
         """
-        base_prompt = self.templates.get("fixer", "")
+        base_prompt = self.templates.get("fixer", self.DEFAULT_PROMPTS["fixer"])
         
         context = f"""
 FILE TO FIX: {file_path}
@@ -239,7 +320,12 @@ Focus on:
 2. Missing functionality
 3. Edge cases not handled
 
-Provide the complete fixed code:
+IMPORTANT:
+- Return ONLY the fixed Python code
+- Do NOT include markdown code blocks
+- Do NOT include explanations
+
+Provide the complete fixed code now:
 """
         
         full_prompt = f"{base_prompt}\n\n{context}"
@@ -258,63 +344,60 @@ Provide the complete fixed code:
         """
         Format the Judge prompt with test results.
         """
-        base_prompt = self.templates.get("judge", "")
+        base_prompt = self.templates.get("judge", self.DEFAULT_PROMPTS["judge"])
 
         context = f"""
-    TEST EXECUTION RESULTS:
+TEST EXECUTION RESULTS:
 
-    STATISTICS:
-    - Tests Passed: {test_statistics.get('passed', 0)}
-    - Tests Failed: {test_statistics.get('failed', 0)}
-    - Errors: {test_statistics.get('errors', 0)}
-    - Total Tests: {test_statistics.get('total', 0)}
-    """
+STATISTICS:
+- Tests Passed: {test_statistics.get('passed', 0)}
+- Tests Failed: {test_statistics.get('failed', 0)}
+- Errors: {test_statistics.get('errors', 0)}
+- Total Tests: {test_statistics.get('total', 0)}
+"""
 
-        # ===== SAFE SCORE HANDLING =====
+        # SAFE SCORE HANDLING
         if previous_score is not None and current_score is not None:
             improvement = current_score - previous_score
             context += f"""
-    CODE QUALITY METRICS:
-    - Previous Pylint Score: {previous_score}/10
-    - Current Pylint Score: {current_score}/10
-    - Improvement: {improvement:+.2f} points
-    """
+CODE QUALITY METRICS:
+- Previous Pylint Score: {previous_score}/10
+- Current Pylint Score: {current_score}/10
+- Improvement: {improvement:+.2f} points
+"""
         elif current_score is not None:
             # First iteration: no previous score
             context += f"""
-    CODE QUALITY METRICS:
-    - Current Pylint Score: {current_score}/10
-    - Previous Pylint Score: N/A
-    - Improvement: N/A
-    """
+CODE QUALITY METRICS:
+- Current Pylint Score: {current_score}/10
+- Previous Pylint Score: N/A
+- Improvement: N/A
+"""
         else:
             # No score at all (rare)
             context += """
-    CODE QUALITY METRICS:
-    - Pylint Score: N/A
-    - Previous Pylint Score: N/A
-    - Improvement: N/A
-    """
+CODE QUALITY METRICS:
+- Pylint Score: N/A
+- Previous Pylint Score: N/A
+- Improvement: N/A
+"""
 
         context += f"""
 
-    TEST OUTPUT:
-
-
+TEST OUTPUT:
 ```
 {test_output}
 ```
 
+TASK:
+Evaluate whether the refactoring is complete and successful.
+Analyze:
+1. Are all tests passing?
+2. If not, what are the critical errors?
+3. Is the code ready for production?
 
-    TASK:
-    Evaluate whether the refactoring is complete and successful.
-    Analyze:
-    1. Are all tests passing?
-    2. If not, what are the critical errors?
-    3. Is the code ready for production?
-
-    Provide your evaluation as JSON:
-    """
+Provide your evaluation as JSON:
+"""
         
         full_prompt = f"{base_prompt}\n\n{context}"
         
@@ -349,6 +432,7 @@ Provide the complete fixed code:
     def extract_json_from_response(self, response: str) -> Optional[Dict]:
         """
         Extract JSON from LLM response, handling markdown code blocks.
+        FIXED: More robust extraction with multiple strategies.
         
         Args:
             response: Raw LLM response
@@ -356,11 +440,23 @@ Provide the complete fixed code:
         Returns:
             Parsed JSON dict or None if parsing fails
         """
-        # Remove markdown code blocks if present
+        if not response:
+            print("❌ Empty response received")
+            return None
+        
+        # Strategy 1: Try direct JSON parsing
+        try:
+            return json.loads(response)
+        except json.JSONDecodeError:
+            pass
+        
+        # Strategy 2: Remove markdown code blocks
         cleaned = response.strip()
         
-        # Remove ```json and ``` markers
+        # Remove ```json and ``` markers (case insensitive)
         if cleaned.startswith("```json"):
+            cleaned = cleaned[7:]
+        elif cleaned.startswith("```JSON"):
             cleaned = cleaned[7:]
         elif cleaned.startswith("```"):
             cleaned = cleaned[3:]
@@ -370,13 +466,26 @@ Provide the complete fixed code:
         
         cleaned = cleaned.strip()
         
-        # Try to parse JSON
+        # Strategy 3: Try parsing cleaned version
         try:
             return json.loads(cleaned)
-        except json.JSONDecodeError as e:
-            print(f"❌ JSON parsing error: {e}")
-            print(f"Response was: {cleaned[:200]}...")
-            return None
+        except json.JSONDecodeError:
+            pass
+        
+        # Strategy 4: Try to find JSON object in text using regex
+        json_pattern = r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}'
+        matches = re.findall(json_pattern, cleaned, re.DOTALL)
+        
+        for match in matches:
+            try:
+                return json.loads(match)
+            except json.JSONDecodeError:
+                continue
+        
+        # Strategy 5: Failed all attempts
+        print(f"❌ JSON parsing error: Could not extract valid JSON")
+        print(f"Response preview: {cleaned[:200]}...")
+        return None
     
     def get_template(self, agent_name: str) -> str:
         """
@@ -388,11 +497,10 @@ Provide the complete fixed code:
         Returns:
             Template string
         """
-        return self.templates.get(agent_name, "")
+        return self.templates.get(agent_name, self.DEFAULT_PROMPTS.get(agent_name, ""))
     
     def reload_templates(self):
         """Reload all templates from disk (useful for prompt iteration)"""
         self.templates.clear()
         self._load_templates()
         print("🔄 Prompt templates reloaded")
-

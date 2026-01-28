@@ -1,5 +1,3 @@
-
-
 """
 Main Entry Point for Refactoring Swarm
 Orchestrates the complete workflow: Auditor -> Fixer -> Judge loop
@@ -176,25 +174,26 @@ class RefactoringOrchestrator:
                 if not read_result["success"]:
                     continue
                 
-        # Auditor analyzes
-        analysis_result = self.auditor.analyze_file_with_fallback(
-            file_path=file_info["relative_path"],
-            file_content=read_result["content"],
-            pylint_result=pylint_result
-        )
+                # Auditor analyzes
+                analysis_result = self.auditor.analyze_file_with_fallback(
+                    file_path=file_info["relative_path"],
+                    file_content=read_result["content"],
+                    pylint_result=pylint_result
+                )
 
-        if analysis_result["success"] and analysis_result["analysis"] is not None:
-            files_to_fix.append({
-                "file_info": file_info,
-                "pylint_result": pylint_result,
-                "analysis": analysis_result["analysis"],
-                "initial_score": score,
-                "used_fallback": analysis_result.get("used_fallback", False)
-            })
+                if analysis_result["success"] and analysis_result["analysis"] is not None:
+                    files_to_fix.append({
+                        "file_info": file_info,
+                        "pylint_result": pylint_result,
+                        "analysis": analysis_result["analysis"],
+                        "initial_score": score,
+                        "used_fallback": analysis_result.get("used_fallback", False)
+                    })
+                
+                    plan_steps = len(analysis_result["analysis"].get("refactoring_plan", []))
+                    fallback_note = " (fallback)" if analysis_result.get("used_fallback") else ""
+                    print(f"  ✅ {file_info['relative_path']}: {plan_steps} refactoring steps{fallback_note}")
         
-            plan_steps = len(analysis_result["analysis"].get("refactoring_plan", []))
-            fallback_note = " (fallback)" if analysis_result.get("used_fallback") else ""
-            print(f"  ✅ {file_info['relative_path']}: {plan_steps} refactoring steps{fallback_note}")
         print(f"\n📊 Summary: {len(files_to_fix)} files need refactoring")
         return files_to_fix
     
@@ -386,12 +385,12 @@ def main():
     
     # Load environment
     load_dotenv()
-    api_key = os.getenv("GOOGLE_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
     
     if not api_key:
-        print("❌ ERROR: GOOGLE_API_KEY not found in .env file")
+        print("❌ ERROR: GROQ_API_KEY not found in .env file")
         print("Please create a .env file with your API key:")
-        print("GOOGLE_API_KEY=your_key_here")
+        print("GROQ_API_KEY=your_key_here")
         return 1
     
     # Validate target directory

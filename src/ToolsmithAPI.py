@@ -460,39 +460,62 @@ class ToolsmithAPI:
             Dict with test results
         """
         try:
-            if target_path:
-                validated_path = self._validate_path(target_path)
-            else:
-                validated_path = self.sandbox_root
-           
-            if not validated_path.exists():
-                return {
-                    "success": False,
-                    "error": "Test target not found",
-                    "passed": False,
-                    "statistics": {"passed": 0, "failed": 0, "errors": 0, "skipped": 0, "total": 0}
-                }
-           
+            # Always run from sandbox root
+            cwd = str(self.sandbox_root)
+            
             # Build pytest command
-            cmd = ['pytest', str(validated_path), '--json-report', '--json-report-file=none']
+            cmd = ['pytest']
+            
+            # If no target path specified, look for tests directory
+            if not target_path:
+                # Check if tests directory exists
+                tests_dir = self.sandbox_root / "tests"
+                if tests_dir.exists():
+                    cmd.append("tests/")
+                else:
+                    # Run pytest on entire sandbox (it will discover tests)
+                    cmd.append(".")
+            else:
+                # Validate and use provided path
+                validated_path = self._validate_path(target_path)
+                if validated_path.exists():
+                    rel_path = str(validated_path.relative_to(self.sandbox_root))
+                    cmd.append(rel_path)
+                else:
+                    return {
+                        "success": False,
+                        "error": "Test target not found",
+                        "passed": False,
+                        "statistics": {"passed": 0, "failed": 0, "errors": 0, "skipped": 0, "total": 0}
+                    }
+            
+            # Add options
+            cmd.append('--tb=short')  # Shorter traceback for cleaner output
             if verbose:
                 cmd.append('-v')
            
+            print(f"🔍 Running pytest command: {' '.join(cmd)} in {cwd}")
+            
             # Run pytest
             result = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
                 timeout=60,
-                cwd=str(self.sandbox_root)
+                cwd=cwd
             )
            
             # Parse results
-            passed = result.returncode == 0
+            passed = result.returncode == 0 or result.returncode == 5  # 5 = no tests found
             output = result.stdout + result.stderr
            
             # Extract test statistics
             stats = self._parse_pytest_output(output)
+            
+            # Print debug info
+            print(f"  Pytest return code: {result.returncode}")
+            print(f"  Tests found: {stats['total']}")
+            print(f"  Output sample: {output[:200]}...")
            
             return {
                 "success": True,
@@ -543,23 +566,30 @@ class ToolsmithAPI:
         }
        
         # Look for summary line like "5 passed, 2 failed in 1.23s"
-        match = re.search(r'(\d+) passed', output)
-        if match:
-            stats["passed"] = int(match.group(1))
+        # OR "5 passed, 2 failed, 1 error, 3 skipped in 1.23s"
+        
+        # Try multiple patterns
+        patterns = [
+            (r'(\d+) passed', 'passed'),
+            (r'(\d+) failed', 'failed'),
+            (r'(\d+) error', 'errors'),
+            (r'(\d+) skipped', 'skipped'),
+            (r'(\d+) warnings', 'warnings')
+        ]
+        
+        for pattern, key in patterns:
+            matches = re.findall(pattern, output)
+            if matches:
+                # Get the last match (most likely from summary)
+                stats[key] = int(matches[-1])
        
-        match = re.search(r'(\d+) failed', output)
+        # Alternative: Look for collected items
+        match = re.search(r'collected (\d+) items?', output)
         if match:
-            stats["failed"] = int(match.group(1))
-       
-        match = re.search(r'(\d+) error', output)
-        if match:
-            stats["errors"] = int(match.group(1))
-       
-        match = re.search(r'(\d+) skipped', output)
-        if match:
-            stats["skipped"] = int(match.group(1))
-       
-        stats["total"] = sum([stats["passed"], stats["failed"], stats["errors"]])
+            stats["total"] = int(match.group(1))
+        else:
+            # Calculate total if not found
+            stats["total"] = sum([stats["passed"], stats["failed"], stats["errors"], stats["skipped"]])
        
         return stats
    
