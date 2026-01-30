@@ -31,54 +31,39 @@ class Calculator:
         """
         return self.value
 
-    def add(self, a: float) -> float:
+    def add(self, a: float) -> None:
         """
         Adds a number to the current value.
 
         Args:
             a (float): The number to add.
-
-        Returns:
-            float: The new value.
         """
         self.value += a
-        return self.value
 
-    def subtract(self, a: float) -> float:
+    def subtract(self, a: float) -> None:
         """
         Subtracts a number from the current value.
 
         Args:
             a (float): The number to subtract.
-
-        Returns:
-            float: The new value.
         """
         self.value -= a
-        return self.value
 
-    def multiply(self, a: float) -> float:
+    def multiply(self, a: float) -> None:
         """
         Multiplies the current value by a number.
 
         Args:
             a (float): The number to multiply by.
-
-        Returns:
-            float: The new value.
         """
         self.value *= a
-        return self.value
 
-    def divide(self, a: float) -> float:
+    def divide(self, a: float) -> None:
         """
         Divides the current value by a number.
 
         Args:
             a (float): The number to divide by.
-
-        Returns:
-            float: The new value.
 
         Raises:
             ZeroDivisionError: If a is zero.
@@ -86,7 +71,6 @@ class Calculator:
         if a == 0:
             raise ZeroDivisionError("Cannot divide by zero")
         self.value /= a
-        return self.value
 
     @staticmethod
     def add_static(a: float, b: float) -> float:

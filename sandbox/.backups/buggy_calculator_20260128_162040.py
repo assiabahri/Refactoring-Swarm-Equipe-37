@@ -31,65 +31,8 @@ class Calculator:
         """
         return self.value
 
-    def add(self, a: float) -> float:
-        """
-        Adds a number to the current value.
-
-        Args:
-            a (float): The number to add.
-
-        Returns:
-            float: The new value.
-        """
-        self.value += a
-        return self.value
-
-    def subtract(self, a: float) -> float:
-        """
-        Subtracts a number from the current value.
-
-        Args:
-            a (float): The number to subtract.
-
-        Returns:
-            float: The new value.
-        """
-        self.value -= a
-        return self.value
-
-    def multiply(self, a: float) -> float:
-        """
-        Multiplies the current value by a number.
-
-        Args:
-            a (float): The number to multiply by.
-
-        Returns:
-            float: The new value.
-        """
-        self.value *= a
-        return self.value
-
-    def divide(self, a: float) -> float:
-        """
-        Divides the current value by a number.
-
-        Args:
-            a (float): The number to divide by.
-
-        Returns:
-            float: The new value.
-
-        Raises:
-            ZeroDivisionError: If a is zero.
-        """
-        if a == 0:
-            raise ZeroDivisionError("Cannot divide by zero")
-        self.value /= a
-        return self.value
-
     @staticmethod
-    def add_static(a: float, b: float) -> float:
+    def add(a: float, b: float) -> float:
         """
         Adds two numbers.
 
@@ -103,7 +46,7 @@ class Calculator:
         return a + b
 
     @staticmethod
-    def subtract_static(a: float, b: float) -> float:
+    def subtract(a: float, b: float) -> float:
         """
         Subtracts two numbers.
 
@@ -117,7 +60,7 @@ class Calculator:
         return a - b
 
     @staticmethod
-    def multiply_static(a: float, b: float) -> float:
+    def multiply(a: float, b: float) -> float:
         """
         Multiplies two numbers.
 
@@ -131,7 +74,7 @@ class Calculator:
         return a * b
 
     @staticmethod
-    def divide_static(a: float, b: float) -> float:
+    def divide(a: float, b: float) -> float:
         """
         Divides two numbers.
 
@@ -193,7 +136,7 @@ def add(a: float, b: float) -> float:
     Returns:
         float: The sum of a and b.
     """
-    return Calculator.add_static(a, b)
+    return Calculator.add(a, b)
 
 
 def subtract(a: float, b: float) -> float:
@@ -207,7 +150,7 @@ def subtract(a: float, b: float) -> float:
     Returns:
         float: The difference of a and b.
     """
-    return Calculator.subtract_static(a, b)
+    return Calculator.subtract(a, b)
 
 
 def multiply(a: float, b: float) -> float:
@@ -221,7 +164,7 @@ def multiply(a: float, b: float) -> float:
     Returns:
         float: The product of a and b.
     """
-    return Calculator.multiply_static(a, b)
+    return Calculator.multiply(a, b)
 
 
 def divide(a: float, b: float) -> float:
@@ -235,7 +178,7 @@ def divide(a: float, b: float) -> float:
     Returns:
         float: The quotient of a and b.
     """
-    return Calculator.divide_static(a, b)
+    return Calculator.divide(a, b)
 
 
 def calculator(initial_value: float = 0) -> Calculator:
@@ -283,18 +226,10 @@ def main():
     The main function.
     """
     calculator_instance = calculator()
-    calculator_instance.add(5)
-    calculator_instance.add(3)
-    print(calculator_instance.get_value())  # Output: 8
-    calculator_instance = calculator(5)
-    calculator_instance.subtract(3)
-    print(calculator_instance.get_value())  # Output: 2
-    calculator_instance = calculator(5)
-    calculator_instance.multiply(3)
-    print(calculator_instance.get_value())  # Output: 15
-    calculator_instance = calculator(6)
-    calculator_instance.divide(3)
-    print(calculator_instance.get_value())  # Output: 2.0
+    print(calculator_instance.add(5, 3))  # Output: 8
+    print(calculator_instance.subtract(5, 3))  # Output: 2
+    print(calculator_instance.multiply(5, 3))  # Output: 15
+    print(calculator_instance.divide(6, 3))  # Output: 2.0
 
 
 if __name__ == "__main__":
