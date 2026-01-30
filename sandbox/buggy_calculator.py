@@ -1,301 +1,41 @@
-from math import factorial as math_factorial
+# Buggy Calculator Module
+# This file has multiple code quality issues
 
-"""
-A module containing a simple calculator class and functions.
-"""
+def add(x,y):
+    return x+y
 
+def subtract( x, y ):
+    result=x-y
+    return result
 
-class Calculator:
-    """
-    A simple calculator class.
+def multiply(a, b):
+    """Multiply two numbers"""
+    return a*b
 
-    Attributes:
-        value (float): The current value of the calculator.
-    """
+def divide(x,y):
+    return x/y
 
-    def __init__(self, initial_value: float = 0):
-        """
-        Initializes the calculator with an initial value.
-
-        Args:
-            initial_value (float): The initial value. Defaults to 0.
-        """
-        self.value = initial_value
-
-    def get_value(self) -> float:
-        """
-        Gets the current value of the calculator.
-
-        Returns:
-            float: The current value.
-        """
+class calculator:
+    def __init__(self,value):
+        self.value=value
+    
+    def add(self,x):
+        self.value=self.value+x
+        return self.value
+    
+    def get_value(self):
         return self.value
 
-    def add(self, a: float) -> float:
-        """
-        Adds a number to the current value.
+def factorial(n):
+    if n==0:
+        return 1
+    else:
+        return n*factorial(n-1)
+
+def power(base,exp):
+    result=1
+    for i in range(exp):
+        result=result*base
+    return result
 
-        Args:
-            a (float): The number to add.
-
-        Returns:
-            float: The new value.
-        """
-        self.value += a
-        return self.value
-
-    def subtract(self, a: float) -> float:
-        """
-        Subtracts a number from the current value.
-
-        Args:
-            a (float): The number to subtract.
-
-        Returns:
-            float: The new value.
-        """
-        self.value -= a
-        return self.value
-
-    def multiply(self, a: float) -> float:
-        """
-        Multiplies the current value by a number.
-
-        Args:
-            a (float): The number to multiply by.
-
-        Returns:
-            float: The new value.
-        """
-        self.value *= a
-        return self.value
-
-    def divide(self, a: float) -> float:
-        """
-        Divides the current value by a number.
-
-        Args:
-            a (float): The number to divide by.
-
-        Returns:
-            float: The new value.
-
-        Raises:
-            ZeroDivisionError: If a is zero.
-        """
-        if a == 0:
-            raise ZeroDivisionError("Cannot divide by zero")
-        self.value /= a
-        return self.value
-
-    @staticmethod
-    def add_static(a: float, b: float) -> float:
-        """
-        Adds two numbers.
-
-        Args:
-            a (float): The first number.
-            b (float): The second number.
-
-        Returns:
-            float: The sum of a and b.
-        """
-        return a + b
-
-    @staticmethod
-    def subtract_static(a: float, b: float) -> float:
-        """
-        Subtracts two numbers.
-
-        Args:
-            a (float): The first number.
-            b (float): The second number.
-
-        Returns:
-            float: The difference of a and b.
-        """
-        return a - b
-
-    @staticmethod
-    def multiply_static(a: float, b: float) -> float:
-        """
-        Multiplies two numbers.
-
-        Args:
-            a (float): The first number.
-            b (float): The second number.
-
-        Returns:
-            float: The product of a and b.
-        """
-        return a * b
-
-    @staticmethod
-    def divide_static(a: float, b: float) -> float:
-        """
-        Divides two numbers.
-
-        Args:
-            a (float): The dividend.
-            b (float): The divisor.
-
-        Returns:
-            float: The quotient of a and b.
-
-        Raises:
-            ZeroDivisionError: If b is zero.
-        """
-        if b == 0:
-            raise ZeroDivisionError("Cannot divide by zero")
-        return a / b
-
-    @staticmethod
-    def factorial(n: int) -> int:
-        """
-        Calculates the factorial of a number.
-
-        Args:
-            n (int): The number.
-
-        Returns:
-            int: The factorial of n.
-
-        Raises:
-            ValueError: If n is negative.
-        """
-        if n < 0:
-            raise ValueError("n must be a non-negative integer")
-        return math_factorial(n)
-
-    @staticmethod
-    def power(a: float, b: float) -> float:
-        """
-        Raises a number to a power.
-
-        Args:
-            a (float): The base.
-            b (float): The exponent.
-
-        Returns:
-            float: a to the power of b.
-        """
-        return a ** b
-
-
-def add(a: float, b: float) -> float:
-    """
-    Adds two numbers using the Calculator class.
-
-    Args:
-        a (float): The first number.
-        b (float): The second number.
-
-    Returns:
-        float: The sum of a and b.
-    """
-    return Calculator.add_static(a, b)
-
-
-def subtract(a: float, b: float) -> float:
-    """
-    Subtracts two numbers using the Calculator class.
-
-    Args:
-        a (float): The first number.
-        b (float): The second number.
-
-    Returns:
-        float: The difference of a and b.
-    """
-    return Calculator.subtract_static(a, b)
-
-
-def multiply(a: float, b: float) -> float:
-    """
-    Multiplies two numbers using the Calculator class.
-
-    Args:
-        a (float): The first number.
-        b (float): The second number.
-
-    Returns:
-        float: The product of a and b.
-    """
-    return Calculator.multiply_static(a, b)
-
-
-def divide(a: float, b: float) -> float:
-    """
-    Divides two numbers using the Calculator class.
-
-    Args:
-        a (float): The dividend.
-        b (float): The divisor.
-
-    Returns:
-        float: The quotient of a and b.
-    """
-    return Calculator.divide_static(a, b)
-
-
-def calculator(initial_value: float = 0) -> Calculator:
-    """
-    Creates a new Calculator instance.
-
-    Args:
-        initial_value (float): The initial value. Defaults to 0.
-
-    Returns:
-        Calculator: A new Calculator instance.
-    """
-    return Calculator(initial_value)
-
-
-def factorial(n: int) -> int:
-    """
-    Calculates the factorial of a number using the Calculator class.
-
-    Args:
-        n (int): The number.
-
-    Returns:
-        int: The factorial of n.
-    """
-    return Calculator.factorial(n)
-
-
-def power(a: float, b: float) -> float:
-    """
-    Raises a number to a power using the Calculator class.
-
-    Args:
-        a (float): The base.
-        b (float): The exponent.
-
-    Returns:
-        float: a to the power of b.
-    """
-    return Calculator.power(a, b)
-
-
-def main():
-    """
-    The main function.
-    """
-    calculator_instance = calculator()
-    calculator_instance.add(5)
-    calculator_instance.add(3)
-    print(calculator_instance.get_value())  # Output: 8
-    calculator_instance = calculator(5)
-    calculator_instance.subtract(3)
-    print(calculator_instance.get_value())  # Output: 2
-    calculator_instance = calculator(5)
-    calculator_instance.multiply(3)
-    print(calculator_instance.get_value())  # Output: 15
-    calculator_instance = calculator(6)
-    calculator_instance.divide(3)
-    print(calculator_instance.get_value())  # Output: 2.0
-
-
-if __name__ == "__main__":
     main()
