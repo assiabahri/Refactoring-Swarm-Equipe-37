@@ -80,7 +80,7 @@ class Calculator:
         value (int or float): The current value.
     """
 
-    def __init__(self, value=0):
+    def __init__(self, value):
         """
         Initialize the calculator with a value.
 
@@ -155,5 +155,5 @@ def power(base, exp):
         result *= base
     return result
 
-def calculator(value=0):
-    return Calculator(value)
+def calculator():
+    return Calculator(0)
